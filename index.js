@@ -10,7 +10,7 @@ const { timeNow } = require('./util');
 const {
   CRON_IN_MINUTE,
   CONNECTIVITY_TIMEOUT,
-  BESO_NODE_URL,
+  BESU_NODE_URL,
   TIMEOUT_TO_RESUME,
 } = require('./config');
 
@@ -39,7 +39,7 @@ cron.schedule(`*/${CRON_IN_MINUTE} * * * *`, async () =>  {
   }, CONNECTIVITY_TIMEOUT);
 
     console.log('checking connectivity! at: ', timeNow());
-    await axios.default.post(BESO_NODE_URL, body);
+    await axios.default.post(BESU_NODE_URL, body);
     console.log('connectivity is fine! at:', timeNow());
     isWorking = true;
   } catch (error) {

@@ -24,7 +24,7 @@
 configurationObject = {
   CRON_IN_MINUTE: 15, // in minutes, this will allow cron job to be repeated every certain time
   CONNECTIVITY_TIMEOUT: 10000, // in milliseconds, a timeout to terminate the connection trail to the node
-  BESO_NODE_URL: 'http://0.0.0.0:8545', // BESO Ethereum URL
+  BESU_NODE_URL: 'http://0.0.0.0:8545', // BESO Ethereum URL
   TIMEOUT_TO_RESUME: 300000, // in milliseconds, as stop script may take some time so I create timeout until stop script done to resume the node.
 }
 ```
