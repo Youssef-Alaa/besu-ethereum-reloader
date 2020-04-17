@@ -63,11 +63,11 @@ cron.schedule(`*/${CRON_IN_MINUTE} * * * *`, async () =>  {
 
   if(!isWorking) {
     console.log('Stopping beso node! at: ', timeNow());
-    shell.exec(`sh ${STOP_SCRIPT_PATH}`);
+    shell.exec(`. ${STOP_SCRIPT_PATH}`);
     //wait till stop finish
     setTimeout(() => {
     console.log('resuming beso node! at: ', timeNow());
-      shell.exec(`sh ${RESUME_SCRIPT_PATH}`);
+      shell.exec(`. ${RESUME_SCRIPT_PATH}`);
     }, TIMEOUT_TO_RESUME);
   }
 }, {
