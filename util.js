@@ -1,5 +1,8 @@
 const path = require('path');
 const fs = require('fs');
+const shell = require('shelljs');
+
+const { BESU_DOT_ENV_PATH } = require('./config');
 
 function addZero (number) {
   if(Number(number) < 10){
@@ -14,14 +17,29 @@ exports.timeNow = () => {
   return time;
 }
 
-exports.checkPaths = (path1, path2) =>{
+exports.checkPaths = (resumeScriptPath, stopScriptPath, dotEnvPath, commonPath) =>{
   try {
-    const p1 = path.resolve(path1);
-    const p2 = path.resolve(path2);
-    fs.readFileSync(p1);
-    fs.readFileSync(p2);
+    const resumeScriptAbsPath = path.resolve(resumeScriptPath);
+    const stopScriptAbsPath = path.resolve(stopScriptPath);
+    const dotEnvAbsPath = path.resolve(dotEnvPath);
+    const commonAbsPath = path.resolve(commonPath);
+    fs.readFileSync(resumeScriptAbsPath);
+    fs.readFileSync(stopScriptAbsPath);
+    fs.readFileSync(dotEnvPath);
+    fs.readFileSync(commonPath);
     console.log('scripts has been found, let me do the rest!')
+    return {
+      resumeScriptAbsPath,
+      stopScriptAbsPath,
+      dotEnvAbsPath,
+      commonAbsPath,
+    }
   } catch (error) {
     throw error;
   }
+}
+
+exports.copyDotEnvAndCommon = (dotEnvPath, commonPath) => {
+  shell.cp(dotEnvPath, __dirname);
+  shell.cp(commonPath, __dirname);
 }

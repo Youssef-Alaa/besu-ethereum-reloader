@@ -1,8 +1,11 @@
 const cron = require("node-cron");
 const shell = require("shelljs");
 const axios = require("axios");
+const logger = require("npmlog");
 
-const { timeNow, checkPaths } = require('./util');
+console.log = logger.info;
+
+const { timeNow, checkPaths, copyDotEnvAndCommon } = require('./util');
 
 const {
   CRON_IN_MINUTE,
@@ -11,9 +14,13 @@ const {
   TIMEOUT_TO_RESUME,
   RESUME_SCRIPT_PATH,
   STOP_SCRIPT_PATH,
+  BESU_DOT_ENV_PATH,
+  COMMON_SCRIPT_PATH
 } = require('./config');
 
-checkPaths(RESUME_SCRIPT_PATH, STOP_SCRIPT_PATH);
+const { dotEnvAbsPath, commonAbsPath } = checkPaths(RESUME_SCRIPT_PATH, STOP_SCRIPT_PATH, BESU_DOT_ENV_PATH, COMMON_SCRIPT_PATH);
+
+copyDotEnvAndCommon(dotEnvAbsPath, commonAbsPath);
 
 
 cron.schedule(`*/${CRON_IN_MINUTE} * * * *`, async () =>  {
@@ -33,7 +40,7 @@ cron.schedule(`*/${CRON_IN_MINUTE} * * * *`, async () =>  {
   console.log('timeout start at: ', timeNow())
   try {
   const intervalId = setInterval(() => {
-    console.log('timeout done at:', timeNow());
+    console.log('connectivity timeout done at:', timeNow());
     if (!isWorking) isWorking = false;
     clearInterval(intervalId);
   }, CONNECTIVITY_TIMEOUT);
@@ -49,11 +56,11 @@ cron.schedule(`*/${CRON_IN_MINUTE} * * * *`, async () =>  {
 
   if(!isWorking) {
     console.log('Stopping beso node! at: ', timeNow());
-    shell.exec(STOP_SCRIPT_PATH);
+    shell.exec(`. ${STOP_SCRIPT_PATH}`);
     //wait till stop finish
     setTimeout(() => {
     console.log('resuming beso node! at: ', timeNow());
-      shell.exec(RESUME_SCRIPT_PATH);
+      shell.exec(`. ${RESUME_SCRIPT_PATH}`);
     }, TIMEOUT_TO_RESUME);
   }
 }, {
