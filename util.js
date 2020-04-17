@@ -17,29 +17,33 @@ exports.timeNow = () => {
   return time;
 }
 
-exports.checkPaths = (resumeScriptPath, stopScriptPath, dotEnvPath, commonPath) =>{
+exports.checkPaths = (resumeScriptPath, stopScriptPath, dotEnvPath, commonPath, dockerYamlPath) =>{
   try {
     const resumeScriptAbsPath = path.resolve(resumeScriptPath);
     const stopScriptAbsPath = path.resolve(stopScriptPath);
     const dotEnvAbsPath = path.resolve(dotEnvPath);
     const commonAbsPath = path.resolve(commonPath);
+    const dockerYamlAbsPath = path.resolve(dockerYamlPath);
     fs.readFileSync(resumeScriptAbsPath);
     fs.readFileSync(stopScriptAbsPath);
     fs.readFileSync(dotEnvPath);
     fs.readFileSync(commonPath);
+    fs.readFileSync(dockerYamlAbsPath);
     console.log('scripts has been found, let me do the rest!')
     return {
       resumeScriptAbsPath,
       stopScriptAbsPath,
       dotEnvAbsPath,
       commonAbsPath,
+      dockerYamlAbsPath
     }
   } catch (error) {
     throw error;
   }
 }
 
-exports.copyDotEnvAndCommon = (dotEnvPath, commonPath) => {
+exports.copyDotEnvAndCommon = (dotEnvPath, commonPath, docketYamlPath) => {
   shell.cp(dotEnvPath, __dirname);
   shell.cp(commonPath, __dirname);
+  shell.cp(docketYamlPath, __dirname);
 }

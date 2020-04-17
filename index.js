@@ -15,12 +15,19 @@ const {
   RESUME_SCRIPT_PATH,
   STOP_SCRIPT_PATH,
   BESU_DOT_ENV_PATH,
-  COMMON_SCRIPT_PATH
+  COMMON_SCRIPT_PATH,
+  DOCKER_COMPOSE_PATH,
 } = require('./config');
 
-const { dotEnvAbsPath, commonAbsPath } = checkPaths(RESUME_SCRIPT_PATH, STOP_SCRIPT_PATH, BESU_DOT_ENV_PATH, COMMON_SCRIPT_PATH);
+const { dotEnvAbsPath, commonAbsPath, dockerYamlAbsPath } = checkPaths(
+  RESUME_SCRIPT_PATH,
+  STOP_SCRIPT_PATH,
+  BESU_DOT_ENV_PATH,
+  COMMON_SCRIPT_PATH,
+  DOCKER_COMPOSE_PATH
+  );
 
-copyDotEnvAndCommon(dotEnvAbsPath, commonAbsPath);
+copyDotEnvAndCommon(dotEnvAbsPath, commonAbsPath, dockerYamlAbsPath);
 
 
 cron.schedule(`*/${CRON_IN_MINUTE} * * * *`, async () =>  {
