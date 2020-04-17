@@ -5,31 +5,17 @@ const logger = require("npmlog");
 
 console.log = logger.info;
 
-const { timeNow, checkPaths, copyDotEnvAndCommon } = require('./util');
+const { timeNow } = require('./util');
 
 const {
   CRON_IN_MINUTE,
   CONNECTIVITY_TIMEOUT,
   BESO_NODE_URL,
   TIMEOUT_TO_RESUME,
-  RESUME_SCRIPT_PATH,
-  STOP_SCRIPT_PATH,
-  BESU_DOT_ENV_PATH,
-  COMMON_SCRIPT_PATH,
-  DOCKER_COMPOSE_PATH,
 } = require('./config');
 
-const { dotEnvAbsPath, commonAbsPath, dockerYamlAbsPath } = checkPaths(
-  RESUME_SCRIPT_PATH,
-  STOP_SCRIPT_PATH,
-  BESU_DOT_ENV_PATH,
-  COMMON_SCRIPT_PATH,
-  DOCKER_COMPOSE_PATH
-  );
 
-copyDotEnvAndCommon(dotEnvAbsPath, commonAbsPath, dockerYamlAbsPath);
-
-
+console.log('****************Started****************');
 cron.schedule(`*/${CRON_IN_MINUTE} * * * *`, async () =>  {
   console.log('********************************');
   console.log('|Date:', `${new Date().toISOString()}|`);
@@ -63,11 +49,11 @@ cron.schedule(`*/${CRON_IN_MINUTE} * * * *`, async () =>  {
 
   if(!isWorking) {
     console.log('Stopping beso node! at: ', timeNow());
-    shell.exec(`. ${STOP_SCRIPT_PATH}`);
+    shell.exec('./stop.sh');
     //wait till stop finish
     setTimeout(() => {
     console.log('resuming beso node! at: ', timeNow());
-      shell.exec(`. ${RESUME_SCRIPT_PATH}`);
+      shell.exec('./resume.sh');
     }, TIMEOUT_TO_RESUME);
   }
 }, {
