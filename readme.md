@@ -28,9 +28,3 @@ configurationObject = {
   TIMEOUT_TO_RESUME: 300000, // in milliseconds, as stop script may take some time so I create timeout until stop script done to resume the node.
 }
 ```
-  
-#### Known Issue
-
-  `CONNECTIVITY_TIMEOUT` does not close the connection trial and always works after 3 minutes
-  as it `axios` default timeout if you are using the remote IP of the node
-  while you are inside this remote node
