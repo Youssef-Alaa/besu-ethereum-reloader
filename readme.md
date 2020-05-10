@@ -10,9 +10,6 @@
   
     to import needed images and allow besu to work properly.
 * *Run*
-  > `cp config.example.js config.js`
-
-* *Run*
   > `nano config.js`
 * configure `config.js` with suitable values.
 * *Run*

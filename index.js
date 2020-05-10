@@ -14,6 +14,8 @@ const {
   TIMEOUT_TO_RESUME,
 } = require('./config');
 
+console.log('Empty allocated variable `lastBlockNumber`');
+let lastBlockNumber = null;
 
 console.log('****************Started****************');
 cron.schedule(`*/${CRON_IN_MINUTE} * * * *`, async () =>  {
@@ -39,9 +41,18 @@ cron.schedule(`*/${CRON_IN_MINUTE} * * * *`, async () =>  {
   }, CONNECTIVITY_TIMEOUT);
 
     console.log('checking connectivity! at: ', timeNow());
-    await axios.default.post(BESU_NODE_URL, body);
-    console.log('connectivity is fine! at:', timeNow());
-    isWorking = true;
+    const { data } = await axios.default.post(BESU_NODE_URL, body);
+    console.log('current block number is, ', data.result);
+    console.log('last block number is, ', lastBlockNumber);
+    if(lastBlockNumber === data.result) {
+      console.log('block number is the same, ', lastBlockNumber === data.result);
+      isWorking = false;
+    }
+    else {
+      lastBlockNumber = data.result;
+      console.log('connectivity is fine! at:', timeNow());
+      isWorking = true;
+    }
   } catch (error) {
     console.log('there is a problem in connectivity, I will restart beso-node! at: ', timeNow());
     isWorking = false;
@@ -49,10 +60,12 @@ cron.schedule(`*/${CRON_IN_MINUTE} * * * *`, async () =>  {
 
   if(!isWorking) {
     console.log('Stopping beso node! at: ', timeNow());
+    console.log('Empty allocated variable as the network is stacked');
+    lastBlockNumber = null;
     shell.exec('./stop.sh');
     //wait till stop finish
-    setTimeout(() => {
-    console.log('resuming beso node! at: ', timeNow());
+    setTimeout(async () => {
+      console.log('resuming beso node! at: ', timeNow());
       shell.exec('./resume.sh');
     }, TIMEOUT_TO_RESUME);
   }
