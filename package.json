@@ -1,12 +1,12 @@
 {
-  "name": "beso-reloader",
+  "name": "besu-reloader",
   "version": "1.0.0",
-  "description": "reload beso node every certain time",
+  "description": "reload besu node every certain time",
   "main": "index.js",
   "scripts": {
     "start:dev": "nodemon index.js",
     "test": "echo \"...\"",
-    "postinstall": "pm2 start index.js --name beso-reloader"
+    "postinstall": "pm2 start index.js --name besu-reloader"
   },
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   },
   "keywords": [
     "reload",
-    "beso-node"
+    "besu-node"
   ],
   "author": "eng.abdul.azeem@gmail.com",
   "license": "ISC",
