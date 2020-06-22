@@ -54,18 +54,18 @@ cron.schedule(`*/${CRON_IN_MINUTE} * * * *`, async () =>  {
       isWorking = true;
     }
   } catch (error) {
-    console.log('there is a problem in connectivity, I will restart beso-node! at: ', timeNow());
+    console.log('there is a problem in connectivity, I will restart besu-node! at: ', timeNow());
     isWorking = false;
   }
 
   if(!isWorking) {
-    console.log('Stopping beso node! at: ', timeNow());
+    console.log('Stopping besu node! at: ', timeNow());
     console.log('Empty allocated variable as the network is stacked');
     lastBlockNumber = null;
     shell.exec('./stop.sh');
     //wait till stop finish
     setTimeout(async () => {
-      console.log('resuming beso node! at: ', timeNow());
+      console.log('resuming besu node! at: ', timeNow());
       shell.exec('./resume.sh');
     }, TIMEOUT_TO_RESUME);
   }
